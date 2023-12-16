@@ -71,6 +71,18 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   });
 });
 
+// delete the tour
+app.delete('/api/v1/tours/:id', (req, res) => {
+  const { tourId } = req.params;
+
+  let tour = tours.find((tour) => tour.id === tourId * 1);
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+
 app.post('/', (req, res) => {
   res.send('You can post using this endpoint...');
 });
