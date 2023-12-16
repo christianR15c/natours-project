@@ -35,6 +35,7 @@ app.get('/api/v1/tours/:tourId', (req, res) => {
   });
 });
 
+// add the tour
 app.post('/api/v1/tours', (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   newTour = Object.assign({ id: newId }, req.body);
@@ -54,6 +55,20 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
+});
+
+// update some properties of the tour
+app.patch('/api/v1/tours/:id', (req, res) => {
+  const { tourId } = req.params;
+
+  let tour = tours.find((tour) => tour.id === tourId * 1);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
 });
 
 app.post('/', (req, res) => {
