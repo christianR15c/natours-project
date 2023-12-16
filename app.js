@@ -9,8 +9,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-// get all tours
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -18,10 +17,9 @@ app.get('/api/v1/tours', (req, res) => {
       tours,
     },
   });
-});
+};
 
-// get a single tour
-app.get('/api/v1/tours/:tourId', (req, res) => {
+const getTour = (req, res) => {
   const { tourId } = req.params;
 
   if (tourId > tours.length || !tour)
@@ -33,10 +31,9 @@ app.get('/api/v1/tours/:tourId', (req, res) => {
       tour,
     },
   });
-});
+};
 
-// add the tour
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   newTour = Object.assign({ id: newId }, req.body);
 
@@ -55,10 +52,9 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
 
-// update some properties of the tour
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   const { tourId } = req.params;
 
   let tour = tours.find((tour) => tour.id === tourId * 1);
@@ -69,10 +65,9 @@ app.patch('/api/v1/tours/:id', (req, res) => {
       tour,
     },
   });
-});
+};
 
-// delete the tour
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
   const { tourId } = req.params;
 
   let tour = tours.find((tour) => tour.id === tourId * 1);
@@ -81,7 +76,14 @@ app.delete('/api/v1/tours/:id', (req, res) => {
     status: 'success',
     data: null,
   });
-});
+};
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app
+  .route('/api/v1/tours/:tourId')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 app.post('/', (req, res) => {
   res.send('You can post using this endpoint...');
